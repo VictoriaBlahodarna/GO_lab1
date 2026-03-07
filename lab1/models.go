@@ -13,6 +13,7 @@ type Company struct {
 	employees []Employee
 }
 
+// TODO: Add validation for empty company name and trim spaces
 func NewCompany(name string) Company {
 	return Company{
 		name:      name,
@@ -20,6 +21,7 @@ func NewCompany(name string) Company {
 	}
 }
 
+// TODO add validation for salary
 func (c *Company) AddEmployee(name string, position Position, salary uint) {
 	c.employees = append(c.employees, NewEmployee(len(c.employees)+1, name, position, salary))
 }
