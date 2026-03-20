@@ -11,6 +11,7 @@ func TestNewCompany(t *testing.T) {
 		name     string
 		compName string
 		want     Company
+		wantErr  error
 	}{
 		{
 			name:     "Create new company",
@@ -19,27 +20,29 @@ func TestNewCompany(t *testing.T) {
 				name:      "TestCorp",
 				employees: []Employee{},
 			},
+			wantErr: nil,
 		},
 		{
 			name:     "Create company with empty name",
 			compName: "",
-			want: Company{
-				name:      "",
-				employees: []Employee{},
-			},
+			want:    Company{},
+			wantErr: ErrEmptyCompanyName,
 		},
 		{
 			name:     "Create company with spaces name",
 			compName: "   ",
-			want: Company{
-				name:      "",
-				employees: []Employee{},
-			},
+			want:    Company{},
+			wantErr: ErrEmptyCompanyName,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewCompany(tt.compName)
+			got, err := NewCompany(tt.compName)
+			if tt.wantErr != nil {
+				require.ErrorIs(t, err, tt.wantErr)
+			} else {
+				require.NoError(t, err)
+			}
 			require.Equal(t, tt.want, got)
 		})
 	}
@@ -57,10 +60,11 @@ func TestCompany_AddEmployee(t *testing.T) {
 		args         args
 		wantLen      int
 		wantLastEmp  Employee
+		wantErr      error
 	}{
 		{
 			name:         "Add first employee",
-			initialState: NewCompany("TestCorp"),
+			initialState: Company{name: "TestCorp", employees: []Employee{}},
 			args: args{
 				name:     "John Doe",
 				position: NewPosition("Dev", 100, 200),
@@ -73,6 +77,7 @@ func TestCompany_AddEmployee(t *testing.T) {
 				position: NewPosition("Dev", 100, 200),
 				salary:   150,
 			},
+			wantErr: nil,
 		},
 		{
 			name: "Add second employee",
@@ -99,14 +104,34 @@ func TestCompany_AddEmployee(t *testing.T) {
 				position: NewPosition("QA", 80, 150),
 				salary:   100,
 			},
+			wantErr: nil,
+		},
+		{
+			name:         "Add employee with invalid salary",
+			initialState: Company{name: "TestCorp", employees: []Employee{}},
+			args: args{
+				name:     "John Doe",
+				position: NewPosition("Dev", 100, 200),
+				salary:   300,
+			},
+			wantLen:     0,
+			wantLastEmp: Employee{},
+			wantErr:     ErrInvalidSalary,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &tt.initialState
-			c.AddEmployee(tt.args.name, tt.args.position, tt.args.salary)
+			err := c.AddEmployee(tt.args.name, tt.args.position, tt.args.salary)
+			if tt.wantErr != nil {
+				require.ErrorIs(t, err, tt.wantErr)
+			} else {
+				require.NoError(t, err)
+			}
 			require.Len(t, c.employees, tt.wantLen)
-			require.Equal(t, tt.wantLastEmp, c.employees[len(c.employees)-1])
+			if tt.wantLen > 0 {
+				require.Equal(t, tt.wantLastEmp, c.employees[len(c.employees)-1])
+			}
 		})
 	}
 }
@@ -122,46 +147,50 @@ func TestCompany_GetEmployee(t *testing.T) {
 	}
 
 	tests := []struct {
-		name  string
-		c     *Company
-		id    int
-		want  Employee
-		want1 bool
+		name    string
+		c       *Company
+		id      int
+		want    Employee
+		wantErr error
 	}{
 		{
-			name:  "Existing employee 1",
-			c:     &comp,
-			id:    1,
-			want:  emp1,
-			want1: true,
+			name:    "Existing employee 1",
+			c:       &comp,
+			id:      1,
+			want:    emp1,
+			wantErr: nil,
 		},
 		{
-			name:  "Existing employee 2",
-			c:     &comp,
-			id:    2,
-			want:  emp2,
-			want1: true,
+			name:    "Existing employee 2",
+			c:       &comp,
+			id:      2,
+			want:    emp2,
+			wantErr: nil,
 		},
 		{
-			name:  "Non-existing employee",
-			c:     &comp,
-			id:    3,
-			want:  Employee{},
-			want1: false,
+			name:    "Non-existing employee",
+			c:       &comp,
+			id:      3,
+			want:    Employee{},
+			wantErr: ErrEmployeeNotFound,
 		},
 		{
-			name:  "Negative ID",
-			c:     &comp,
-			id:    -1,
-			want:  Employee{},
-			want1: false,
+			name:    "Negative ID",
+			c:       &comp,
+			id:      -1,
+			want:    Employee{},
+			wantErr: ErrEmployeeNotFound,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := tt.c.GetEmployee(tt.id)
+			got, err := tt.c.GetEmployee(tt.id)
+			if tt.wantErr != nil {
+				require.ErrorIs(t, err, tt.wantErr)
+			} else {
+				require.NoError(t, err)
+			}
 			require.Equal(t, tt.want, got)
-			require.Equal(t, tt.want1, got1)
 		})
 	}
 }
@@ -238,7 +267,7 @@ func TestCompany_String(t *testing.T) {
 			want: []string{
 				"Company: TestCorp, Employees: 1",
 				"Dev:",
-				"1: Alice, $15.00",
+				"1: Alice (Junior), $15.00",
 			},
 		},
 		{
@@ -342,8 +371,38 @@ func TestNewEmployee(t *testing.T) {
 	}
 }
 
+func TestPosition_GetLevel(t *testing.T) {
+	tests := []struct {
+		name string
+		pos  Position
+		want string
+	}{
+		{
+			name: "Senior level",
+			pos:  NewPosition("Senior Dev", 300000, 500000),
+			want: "Senior/Management",
+		},
+		{
+			name: "Middle level",
+			pos:  NewPosition("Dev", 150000, 250000),
+			want: "Middle",
+		},
+		{
+			name: "Junior level",
+			pos:  NewPosition("Junior Dev", 50000, 100000),
+			want: "Junior",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.pos.GetLevel()
+			require.Equal(t, tt.want, got)
+		})
+	}
+}
+
 func TestEmployee_String(t *testing.T) {
-	devPos := NewPosition("Dev", 1000, 2000)
+	devPos := NewPosition("Dev", 150000, 200000)
 	tests := []struct {
 		name string
 		e    Employee
@@ -351,8 +410,8 @@ func TestEmployee_String(t *testing.T) {
 	}{
 		{
 			name: "Format employee",
-			e:    NewEmployee(1, "Alice", devPos, 1500),
-			want: "1: Alice, $15.00\n",
+			e:    NewEmployee(1, "Alice", devPos, 160000),
+			want: "1: Alice (Middle), $1600.00\n",
 		},
 	}
 	for _, tt := range tests {
