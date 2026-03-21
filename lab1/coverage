@@ -1,0 +1,22 @@
+mode: set
+labgo/lab1/main.go:5.13,24.2 9 0
+labgo/lab1/models.go:16.38,21.2 1 1
+labgo/lab1/models.go:23.76,25.2 1 1
+labgo/lab1/models.go:27.56,28.32 1 1
+labgo/lab1/models.go:28.32,29.17 1 1
+labgo/lab1/models.go:29.17,31.4 1 1
+labgo/lab1/models.go:33.2,33.26 1 1
+labgo/lab1/models.go:36.72,38.32 2 1
+labgo/lab1/models.go:38.32,39.29 1 1
+labgo/lab1/models.go:39.29,41.4 1 1
+labgo/lab1/models.go:43.2,43.18 1 1
+labgo/lab1/models.go:46.35,48.32 2 1
+labgo/lab1/models.go:48.32,50.3 1 1
+labgo/lab1/models.go:52.2,55.55 3 1
+labgo/lab1/models.go:55.55,57.31 2 1
+labgo/lab1/models.go:57.31,59.4 1 1
+labgo/lab1/models.go:61.2,61.20 1 1
+labgo/lab1/models.go:70.67,76.2 1 1
+labgo/lab1/models.go:85.80,92.2 1 1
+labgo/lab1/models.go:94.35,96.2 1 1
+labgo/lab1/models.go:101.33,103.2 1 1
