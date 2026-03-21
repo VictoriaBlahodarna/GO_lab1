@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	developer := NewPosition("Developer", 200000, 800000)
-	manager := NewPosition("Manager", 300000, 1000000)
-	qaEngineer := NewPosition("QA Engineer", 150000, 500000)
+	developer := NewPosition("Developer", 2000*OneDollar, 8000*OneDollar)
+	manager := NewPosition("Manager", 3000*OneDollar, 10000*OneDollar)
+	qaEngineer := NewPosition("QA Engineer", 1500*OneDollar, 5000*OneDollar)
 
 	company, err := NewCompany("Tech Solutions Inc.")
 	if err != nil {
@@ -13,24 +13,24 @@ func main() {
 		return
 	}
 
-	if err := company.AddEmployee("Олександр", developer, 450000); err != nil {
+	if err := company.AddEmployee("Олександр", developer, 4500*OneDollar); err != nil {
 		fmt.Printf("Помилка найму Олександра: %v\n", err)
 	}
 
-	if err := company.AddEmployee("Марія", developer, 550000); err != nil {
+	if err := company.AddEmployee("Марія", developer, 5500*OneDollar); err != nil {
 		fmt.Printf("Помилка найму Марії: %v\n", err)
 	}
 
-	if err := company.AddEmployee("Іван", manager, 700000); err != nil {
+	if err := company.AddEmployee("Іван", manager, 7000*OneDollar); err != nil {
 		fmt.Printf("Помилка найму Івана: %v\n", err)
 	}
 
-	if err := company.AddEmployee("Анна", qaEngineer, 250000); err != nil {
+	if err := company.AddEmployee("Анна", qaEngineer, 2500*OneDollar); err != nil {
 		fmt.Printf("Помилка найму Анни: %v\n", err)
 	}
 
 	// неправильна зарплата
-	if err := company.AddEmployee("Олексій", qaEngineer, 900000); err != nil {
+	if err := company.AddEmployee("Олексій", qaEngineer, 9000*OneDollar); err != nil {
 		fmt.Printf("Очікувана помилка найму Олексія: %v\n", err)
 	}
 

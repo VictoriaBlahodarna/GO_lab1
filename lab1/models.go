@@ -108,9 +108,9 @@ func NewPosition(name string, minSalary, maxSalary uint) Position {
 
 func (p Position) GetLevel() string {
 	switch {
-	case p.minSalary >= Dollar(300000):
+	case p.minSalary >= Dollar(3000*OneDollar):
 		return "Senior/Management"
-	case p.minSalary >= Dollar(150000):
+	case p.minSalary >= Dollar(1500*OneDollar):
 		return "Middle"
 	default:
 		return "Junior"
@@ -143,7 +143,9 @@ func (e Employee) String() string {
 
 type Dollar uint
 
+const OneDollar = 100
+
 // Example: Dollar = 3075 is shown as $30.75
 func (d Dollar) String() string {
-	return fmt.Sprintf("$%d.%02d", d/100, d%100)
+	return fmt.Sprintf("$%d.%02d", d/OneDollar, d%OneDollar)
 }

@@ -25,24 +25,24 @@ func TestNewCompany(t *testing.T) {
 		{
 			name:     "Create company with empty name",
 			compName: "",
-			want:    Company{},
-			wantErr: ErrEmptyCompanyName,
+			want:     Company{},
+			wantErr:  ErrEmptyCompanyName,
 		},
 		{
 			name:     "Create company with spaces name",
 			compName: "   ",
-			want:    Company{},
-			wantErr: ErrEmptyCompanyName,
+			want:     Company{},
+			wantErr:  ErrEmptyCompanyName,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NewCompany(tt.compName)
-			if tt.wantErr != nil {
-				require.ErrorIs(t, err, tt.wantErr)
-			} else {
-				require.NoError(t, err)
-			}
+			// if tt.wantErr != nil {
+			require.ErrorIs(t, err, tt.wantErr)
+			// } else {
+			// 	require.NoError(t, err)
+			// }
 			require.Equal(t, tt.want, got)
 		})
 	}
@@ -123,11 +123,11 @@ func TestCompany_AddEmployee(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &tt.initialState
 			err := c.AddEmployee(tt.args.name, tt.args.position, tt.args.salary)
-			if tt.wantErr != nil {
-				require.ErrorIs(t, err, tt.wantErr)
-			} else {
-				require.NoError(t, err)
-			}
+			// if tt.wantErr != nil {
+			require.ErrorIs(t, err, tt.wantErr)
+			// } else {
+			// 	require.NoError(t, err)
+			// }
 			require.Len(t, c.employees, tt.wantLen)
 			if tt.wantLen > 0 {
 				require.Equal(t, tt.wantLastEmp, c.employees[len(c.employees)-1])
@@ -303,13 +303,13 @@ func TestNewPosition(t *testing.T) {
 			name: "Create normal position",
 			args: args{
 				name:      "Dev",
-				minSalary: 1000,
-				maxSalary: 2000,
+				minSalary: 1000 * OneDollar,
+				maxSalary: 2000 * OneDollar,
 			},
 			want: Position{
 				name:      "Dev",
-				minSalary: Dollar(1000),
-				maxSalary: Dollar(2000),
+				minSalary: Dollar(1000 * OneDollar),
+				maxSalary: Dollar(2000 * OneDollar),
 			},
 		},
 		{
