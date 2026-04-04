@@ -92,6 +92,7 @@ func TestTravellers_GetTraveller(t *testing.T) {
 }
 
 func TestTravellers_CreateTraveller(t *testing.T) {
+	t.Parallel()
 	createdID := uuid.New()
 
 	tests := []struct {
@@ -161,6 +162,7 @@ func TestTravellers_CreateTraveller(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			mockStorage := &MockTravellerStorage{}
 			if tt.mockSetup != nil {
 				tt.mockSetup(mockStorage)
