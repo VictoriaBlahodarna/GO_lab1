@@ -45,8 +45,8 @@ func (p Parser) Run(ctx context.Context, filePath string) error {
 	return nil
 }
 
-func (p Parser) parse(r *csv.Reader) ([]internal.Traveller, error) {
-	var travelers []internal.Traveller
+func (p Parser) parse(r *csv.Reader) ([]internal.CreateTravellerPayload, error) {
+	var travelers []internal.CreateTravellerPayload
 
 	for i := 0; ; i++ {
 		row, err := r.Read()
@@ -63,7 +63,7 @@ func (p Parser) parse(r *csv.Reader) ([]internal.Traveller, error) {
 			return nil, fmt.Errorf("failed to parse age vaue %s in #%d: %w", row[2], i, err)
 		}
 
-		traveler := internal.Traveller{
+		traveler := internal.CreateTravellerPayload{
 			FirstName: row[0],
 			LastName:  row[1],
 			Age:       age,
@@ -75,9 +75,9 @@ func (p Parser) parse(r *csv.Reader) ([]internal.Traveller, error) {
 	return travelers, nil
 }
 
-func (p Parser) process(ctx context.Context, travelers []internal.Traveller) error {
+func (p Parser) process(ctx context.Context, travelers []internal.CreateTravellerPayload) error {
 	for _, traveler := range travelers {
-		if _, err := p.service.Create(ctx, traveler); err != nil {
+		if _, err := p.service.CreateTraveller(ctx, traveler); err != nil {
 			return fmt.Errorf("failed to create traveller: %w", err)
 		}
 	}
