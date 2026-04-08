@@ -76,3 +76,42 @@ func (c Client) Create(ctx context.Context, params internal.CreateEmployeePayloa
 
 	return empID, nil
 }
+
+func (c Client) GetAll() []internal.Employee {
+	q := `
+		SELECT e.id, e.name, p.name as position_name, p.min_salary, p.max_salary, e.salary 
+		FROM employees e
+		JOIN positions p ON e.position_id = p.id
+	`
+
+	type rawData struct {
+		ID           int    `db:"id"`
+		Name         string `db:"name"`
+		PositionName string `db:"position_name"`
+		MinSalary    uint   `db:"min_salary"`
+		MaxSalary    uint   `db:"max_salary"`
+		Salary       uint   `db:"salary"`
+	}
+
+	var rows []rawData
+	err := c.dbExec.Queryx(q)
+	if err != nil {
+		return nil
+	}
+
+	employees := make([]internal.Employee, len(rows))
+	for i, row := range rows {
+		employees[i] = internal.Employee{
+			ID:   row.ID,
+			Name: row.Name,
+			Position: internal.Position{
+				Name:      row.PositionName,
+				MinSalary: row.MinSalary,
+				MaxSalary: row.MaxSalary,
+			},
+			Salary: row.Salary,
+		}
+	}
+
+	return employees
+}

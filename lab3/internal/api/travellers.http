@@ -1,15 +1,15 @@
 ### GET request to example server
-GET http://localhost:8081/api/v1/travellers?id=9f47303a-2295-4528-a6e9-16eec3b86e56
+GET http://localhost:8081/api/v1/employees?id=9f47303a-2295-4528-a6e9-16eec3b86e56
 
 ###
 
 ### DELETE request to example server
-DELETE http://localhost:8081/api/v1/travellers
+DELETE http://localhost:8081/api/v1/employees
 
 ###
 
 ### POST request to example server
-POST http://localhost:8081/api/v1/travellers
+POST http://localhost:8081/api/v1/employees
 
 {
 "first_name": "John",

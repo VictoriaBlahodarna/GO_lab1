@@ -6,11 +6,11 @@ import (
 )
 
 type EmployeeService struct {
-	storage EmployeeStorage
+	employeesStorage EmployeeStorage
 }
 
 func NewEmployeeService(storage EmployeeStorage) EmployeeService {
-	return EmployeeService{storage: storage}
+	return EmployeeService{employeesStorage: storage}
 }
 
 func (s EmployeeService) GetEmployee(ctx context.Context, id int) (Employee, error) {
@@ -45,4 +45,22 @@ func (s EmployeeService) CreateEmployee(ctx context.Context, params CreateEmploy
 	}
 
 	return empID, nil
+}
+
+func (s EmployeeService) GetTopPaidEmployees() map[Position]Employee {
+	topPaid := make(map[Position]Employee)
+
+	for _, e := range s.storage.GetAll() {
+		currentTop, exists := topPaid[e.position]
+		if !exists {
+			topPaid[e.position] = e
+			continue
+		}
+
+		if e.salary > currentTop.salary {
+			topPaid[e.position] = e
+		}
+	}
+
+	return topPaid
 }
