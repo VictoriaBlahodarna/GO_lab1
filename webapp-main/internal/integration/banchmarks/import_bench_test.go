@@ -2,9 +2,9 @@ package banchmarks
 
 import (
 	"context"
-	"github.com/DenisGoldiner/webapp/internal"
-	"github.com/DenisGoldiner/webapp/internal/adapters/postgres"
-	"github.com/DenisGoldiner/webapp/internal/ports/ftp"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/adapters/postgres"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/ports/ftp"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
@@ -26,7 +26,7 @@ func BenchmarkSample(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		if err = travellersParser.Run(ctx, "/Users/denys/Go/src/github.com/DenisGoldiner/webapp/internal/integration/data/test_1.csv"); err != nil {
+		if err = travellersParser.Run(ctx, "/Users/denys/Go/src/github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/integration/data/test_1.csv"); err != nil {
 			b.Fatalf("unespected error, %v", err)
 		}
 	}

@@ -3,7 +3,7 @@ package rest
 import (
 	"strings"
 
-	"github.com/DenisGoldiner/webapp/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
 	"github.com/google/uuid"
 )
 

@@ -9,9 +9,9 @@ import (
 	_ "github.com/lib/pq"
 	"golang.org/x/exp/slog"
 
-	"github.com/DenisGoldiner/webapp/internal"
-	"github.com/DenisGoldiner/webapp/internal/adapters/postgres"
-	"github.com/DenisGoldiner/webapp/internal/ports/rest"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/adapters/postgres"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/ports/rest"
 )
 
 func main() {

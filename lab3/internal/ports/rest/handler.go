@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/exp/slog"
 
-	"github.com/DenisGoldiner/webapp/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
 )
 
 type EmployeeHandler struct {

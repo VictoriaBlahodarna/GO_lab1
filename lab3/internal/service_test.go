@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/DenisGoldiner/webapp/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
 )
 
 type mockStorage struct {
