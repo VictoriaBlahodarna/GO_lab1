@@ -37,6 +37,10 @@ func (m mockStorage) GetAll() []internal.Employee {
 	return nil
 }
 
+func (m mockStorage) BulkCreate(ctx context.Context, params []internal.CreateEmployeePayload) error {
+	return nil
+}
+
 func TestEmployeeService_CreateEmployee(t *testing.T) {
 	ctx := context.Background()
 

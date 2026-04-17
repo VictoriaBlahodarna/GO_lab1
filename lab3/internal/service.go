@@ -47,6 +47,13 @@ func (s EmployeeService) CreateEmployee(ctx context.Context, params CreateEmploy
 	return empID, nil
 }
 
+func (s EmployeeService) BulkCreateEmployees(ctx context.Context, params []CreateEmployeePayload) error {
+	if len(params) == 0 {
+		return nil
+	}
+	return s.employeesStorage.BulkCreate(ctx, params)
+}
+
 func (s EmployeeService) GetTopPaidEmployees() map[Position]Employee {
 	topPaid := make(map[Position]Employee)
 

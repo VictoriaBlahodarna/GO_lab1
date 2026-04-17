@@ -77,6 +77,18 @@ func (c Client) Create(ctx context.Context, params internal.CreateEmployeePayloa
 	return empID, nil
 }
 
+func (c Client) BulkCreate(ctx context.Context, params []internal.CreateEmployeePayload) error {
+	// Для простоти та сумісності з поточним адаптером 
+	// ми просто циклічно викликаємо збереження. 
+	// У реальному Production застосовують sqlx.NamedExec або генерують множинний INSERT INTO ... VALUES (...), (...)
+	for _, p := range params {
+		if _, err := c.Create(ctx, p); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (c Client) GetAll() []internal.Employee {
 	q := `
 		SELECT e.id, e.name, p.name as position_name, p.min_salary, p.max_salary, e.salary 

@@ -16,6 +16,7 @@ type EmployeeStorage interface {
 	Get(ctx context.Context, id int) (Employee, error)
 	Create(ctx context.Context, params CreateEmployeePayload) (int, error)
 	GetAll() []Employee
+	BulkCreate(ctx context.Context, params []CreateEmployeePayload) error
 }
 
 type Position struct {
