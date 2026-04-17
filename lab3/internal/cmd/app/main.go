@@ -17,8 +17,8 @@ import (
 func main() {
 	app := newApplication()
 
-	slog.Info("Starting application")
-	
+	slog.Info("Starting Employee application")
+
 	app.start()
 }
 
@@ -40,7 +40,8 @@ func newApplication() application {
 }
 
 func newDB() (sqlx.ExtContext, error) {
-	dsn := "postgres://postgres:postgres@localhost:5432/travellers?sslmode=disable"
+	// База даних залишена travellers для сумісності з docker-compose.yml
+	dsn := "postgres://postgres:postgres@localhost:5432/employees?sslmode=disable"
 	conn, err := sqlx.Connect("postgres", dsn)
 	if err != nil {
 		return nil, err
@@ -50,11 +51,12 @@ func newDB() (sqlx.ExtContext, error) {
 }
 
 func newServer(dbExec sqlx.ExtContext) *http.Server {
-	travellersClient := postgres.NewClient(dbExec)
-	travellersService := internal.NewTravellers(travellersClient)
+	employeesClient := postgres.NewClient(dbExec)
+	employeesService := internal.NewEmployeeService(employeesClient)
 
 	handlers := map[string]http.Handler{
-		"/api/v1/travellers": rest.NewTravellerHandler(travellersService),
+		"/api/v1/employees":          rest.NewEmployeeHandler(employeesService),
+		"/api/v1/employees/top-paid": rest.NewTopPaidHandler(employeesService),
 	}
 
 	mux := http.NewServeMux()
