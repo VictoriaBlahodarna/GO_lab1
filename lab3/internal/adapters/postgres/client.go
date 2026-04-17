@@ -94,7 +94,7 @@ func (c Client) GetAll() []internal.Employee {
 	}
 
 	var rows []rawData
-	err := c.dbExec.Queryx(q)
+	err := sqlx.SelectContext(context.Background(), c.dbExec, &rows, q)
 	if err != nil {
 		return nil
 	}

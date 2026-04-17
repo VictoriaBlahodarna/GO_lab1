@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"golang.org/x/exp/slog"
+
 	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
 )
 
@@ -23,7 +25,14 @@ func (h TopPaidHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	topPaid := h.service.GetTopPaidEmployees()
 
+	serializableTopPaid := make(map[string]internal.Employee)
+	for pos, emp := range topPaid {
+		serializableTopPaid[pos.Name] = emp
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(topPaid)
+	if err := json.NewEncoder(w).Encode(serializableTopPaid); err != nil {
+		slog.Error("failed to encode top paid response", "error", err)
+	}
 }

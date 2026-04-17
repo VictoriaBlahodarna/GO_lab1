@@ -18,7 +18,7 @@ func (s EmployeeService) GetEmployee(ctx context.Context, id int) (Employee, err
 		return Employee{}, fmt.Errorf("%w: id must be greater than 0", ErrInvalidInput)
 	}
 
-	res, err := s.storage.Get(ctx, id)
+	res, err := s.employeesStorage.Get(ctx, id)
 	if err != nil {
 		return Employee{}, fmt.Errorf("%w: failed to get employee from storage", err)
 	}
@@ -39,7 +39,7 @@ func (s EmployeeService) CreateEmployee(ctx context.Context, params CreateEmploy
 		return 0, fmt.Errorf("%w: position must be provided", ErrInvalidInput)
 	}
 
-	empID, err := s.storage.Create(ctx, params)
+	empID, err := s.employeesStorage.Create(ctx, params)
 	if err != nil {
 		return 0, fmt.Errorf("failed to create employee in storage: %w", err)
 	}
@@ -50,15 +50,15 @@ func (s EmployeeService) CreateEmployee(ctx context.Context, params CreateEmploy
 func (s EmployeeService) GetTopPaidEmployees() map[Position]Employee {
 	topPaid := make(map[Position]Employee)
 
-	for _, e := range s.storage.GetAll() {
-		currentTop, exists := topPaid[e.position]
+	for _, e := range s.employeesStorage.GetAll() {
+		currentTop, exists := topPaid[e.Position]
 		if !exists {
-			topPaid[e.position] = e
+			topPaid[e.Position] = e
 			continue
 		}
 
-		if e.salary > currentTop.salary {
-			topPaid[e.position] = e
+		if e.Salary > currentTop.Salary {
+			topPaid[e.Position] = e
 		}
 	}
 

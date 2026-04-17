@@ -13,6 +13,7 @@ import (
 type mockStorage struct {
 	createFunc func(ctx context.Context, params internal.CreateEmployeePayload) (int, error)
 	getFunc    func(ctx context.Context, id int) (internal.Employee, error)
+	getAllFunc func() []internal.Employee
 }
 
 func (m mockStorage) Create(ctx context.Context, params internal.CreateEmployeePayload) (int, error) {
@@ -27,6 +28,13 @@ func (m mockStorage) Get(ctx context.Context, id int) (internal.Employee, error)
 		return m.getFunc(ctx, id)
 	}
 	return internal.Employee{}, nil
+}
+
+func (m mockStorage) GetAll() []internal.Employee {
+	if m.getAllFunc != nil {
+		return m.getAllFunc()
+	}
+	return nil
 }
 
 func TestEmployeeService_CreateEmployee(t *testing.T) {
