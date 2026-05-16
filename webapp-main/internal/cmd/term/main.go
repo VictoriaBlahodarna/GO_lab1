@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/DenisGoldiner/webapp/internal/ports/ftp"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/ports/ftp"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -10,8 +10,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/DenisGoldiner/webapp/internal"
-	"github.com/DenisGoldiner/webapp/internal/adapters/postgres"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal"
+	"github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/adapters/postgres"
 )
 
 func main() {
@@ -56,7 +56,7 @@ func run() {
 	travellersService := internal.NewTravellers(travellersClient)
 	travellersParser := ftp.NewParser(travellersService)
 
-	if err = travellersParser.Run(ctx, "/Users/denys/Go/src/github.com/DenisGoldiner/webapp/internal/integration/data/test_1.csv"); err != nil {
+	if err = travellersParser.Run(ctx, "/Users/denys/Go/src/github.com/VictoriaBlahodarna/GO_lab1/lab3/internal/integration/data/test_1.csv"); err != nil {
 		log.Printf("error running travellers import: %v", err)
 		return
 	}

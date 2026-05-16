@@ -1,4 +1,4 @@
-module github.com/DenisGoldiner/webapp
+module github.com/VictoriaBlahodarna/GO_lab1/lab3
 
 go 1.26.0
 
